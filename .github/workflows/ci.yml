@@ -1,30 +1,36 @@
-name: Node.js CI
-
+name: Continuous Integration
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-# Set the environment variable globally for this workflow
-env:
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+    branches:
+      - main
 
 jobs:
-  build:
+  run_tests:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [24.x]
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '25'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.12.1
+        with:
+          mongodb-version: 7
+
+      - name: lint test
+        run: npm run lint
+
+      - name: unit test
+        run: npm run test:unit
+
+      - name: Cypress.io
+        uses: cypress-io/github-action@v7.1.9
+        with:
+          start: npm run start:test
