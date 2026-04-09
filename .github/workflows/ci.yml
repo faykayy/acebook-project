@@ -55,7 +55,7 @@ jobs:
       - name: Zip and Push to S3
         run: |
           aws deploy push \
-            --application-name [[farhia-code-deploy-app]] \
+            --application-name farhia-code-deploy-app \
             --description "Revision for ${{ github.sha }}" \
             --ignore-hidden-files \
             --s3-location s3://acebook-project-s3-bucket/artifact.zip \
