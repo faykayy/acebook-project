@@ -67,5 +67,4 @@ jobs:
           aws deploy create-deployment \
             --application-name farhia-code-deploy-app \
             --deployment-group-name farhia-production \
-            --deployment-config-name CodeDeployDefault.OneAtTime \
             --s3-location bucket=acebook-project-s3-bucket,key=artifact.zip,bundleType=zip
